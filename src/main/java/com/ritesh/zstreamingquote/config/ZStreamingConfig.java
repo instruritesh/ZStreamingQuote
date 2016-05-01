@@ -1,6 +1,9 @@
 package com.ritesh.zstreamingquote.config;
 
 public class ZStreamingConfig {
+	/**
+	 * Configuration Constants
+	 */
 	public static final String QUOTE_STREAMING_START_TIME = "09:15:01";
 	public static final Integer QUOTE_STREAMING_WS_HEARTBIT_CHECK_TIME = 3000;
 	public static final Integer QUOTE_STREAMING_WS_DATA_CHECK_TIME_ON_SUBSCRIBE = 5000;
@@ -146,66 +149,82 @@ public class ZStreamingConfig {
 	 * WebApp config
 	 */
 	public static Integer getJettyServerPortNum(){
+		//Port Num for Jetty Server
 		return JETTY_SERVER_PORT_NUM;
 	}
 	
 	public static final String getJettyServerProcessStartURL(){
+		//Streaming Quote process Start URL
 		return JETTY_SERVER_PROCESS_START_URL;
 	}
 	
 	public static final String getJettyServerProcessStopURL(){
+		//Streaming Quote process Stop URL
 		return JETTY_SERVER_PROCESS_STOP_URL;
 	}
 	
 	public static final String getJettyServerTimeRangeOHLCURL(){
+		//Streaming Quote OHLC Data Fetch URL
 		return JETTY_SERVER_TIMERANGE_OHLC_URL;
 	}
 	
 	public static final String getJettyServerTimeRangeStreamingQuoteURL(){
+		//Streaming Quote Streamed Data Fetch URL
 		return JETTY_SERVER_TIMERANGE_STREAMING_QUOTE_URL;
 	}
 	
 	public static final String getJettyServerProcessStartApiKeyReqParam(){
+		//Streaming Quote process Start Request Param Api Key
 		return JETTY_SERVER_PROCESS_START_APIKEY_REQ_PARAM;
 	}
 	
 	public static final String getJettyServerProcessStartUserIdReqParam(){
+		//Streaming Quote process Start Request Param User ID
 		return JETTY_SERVER_PROCESS_START_USERID_REQ_PARAM;
 	}
 	
 	public static final String getJettyServerProcessStartPubTokenReqParam(){
+		//Streaming Quote process Start Request Param Public Token
 		return JETTY_SERVER_PROCESS_START_PUBTOKEN_REQ_PARAM;
 	}
 	
 	public static final String getJettyServerTimeRangeOHLCformatReqParam(){
+		//OHLC Data Request Param Data Format type
 		return JETTY_SERVER_TIMERANGE_FORMAT_REQ_PARAM;
 	}
 	
 	public static final String getJettyServerTimeRangeOHLCfromTimeReqParam(){
+		//OHLC Data Request Param From Time
 		return JETTY_SERVER_TIMERANGE_FROM_TIME_REQ_PARAM;
 	}
 	
 	public static final String getJettyServerTimeRangeOHLCtoTimeReqParam(){
+		//OHLC Data Request Param To Time
 		return JETTY_SERVER_TIMERANGE_TO_TIME_REQ_PARAM;
 	}
 	
 	public static final String getJettyServerTimeRangeOHLCinstrumentReqParam(){
+		//OHLC Data Request Param Instrument Token
 		return JETTY_SERVER_TIMERANGE_INSTRUMENT_REQ_PARAM;
 	}
 	
 	public static final String getJettyServerTimeRangeStreamingQuoteformatReqParam(){
+		//Streaming Data Request Param Data Format Type
 		return JETTY_SERVER_TIMERANGE_FORMAT_REQ_PARAM;
 	}
 	
 	public static final String getJettyServerTimeRangeStreamingQuotefromTimeReqParam(){
+		//Streaming Data Request Param From Time
 		return JETTY_SERVER_TIMERANGE_FROM_TIME_REQ_PARAM;
 	}
 	
 	public static final String getJettyServerTimeRangeStreamingQuotetoTimeReqParam(){
+		//Streaming Data Request Param To Time
 		return JETTY_SERVER_TIMERANGE_TO_TIME_REQ_PARAM;
 	}
 	
 	public static final String getJettyServerTimeRangeStreamingQuoteinstrumentReqParam(){
+		//Streaming Data Request Param Instrument Token
 		return JETTY_SERVER_TIMERANGE_INSTRUMENT_REQ_PARAM;
 	}
 }
