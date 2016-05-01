@@ -6,9 +6,9 @@ import com.ritesh.zstreamingquote.control.ZStreamingQuoteControl;
 
 public class TestApp {
 	public static void main(String[] args) {
-		String apiKey = "abcd51hdgns";
-		String userId = "DR1234";
-		String publicToken = "asljfldlncnl093nnnzc4";
+		String apiKey = "abcd51hdgns";	// API KEY
+		String userId = "DR1234";	// USER ID
+		String publicToken = "asljfldlncnl093nnnzc4";	// PUBLIC TOKEN
 
 		if (!TradingHolidays.isHoliday()) {
 			// Start Only when Its not a trading holiday
