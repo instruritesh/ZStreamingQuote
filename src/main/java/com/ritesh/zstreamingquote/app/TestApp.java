@@ -6,10 +6,6 @@ import com.ritesh.zstreamingquote.control.ZStreamingQuoteControl;
 
 public class TestApp {
 	public static void main(String[] args) {
-//		 String apiKey = "zac2flvsbza9cge4";
-//		 String userId = "DR2062";
-//		 String publicToken = "bb20b54f2d9a0b6efa8d879e80a024dd";
-
 		String apiKey = "abcd51hdgns";
 		String userId = "DR1234";
 		String publicToken = "asljfldlncnl093nnnzc4";
