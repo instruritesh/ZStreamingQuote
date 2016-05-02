@@ -1,6 +1,7 @@
 # ZStreamingQuote
 ZStreamingQuote is an open source framework for handling, processing and storing of Streaming Quotes for Zerodha Kite Connect Web Socket based Streaming Quotes. It is a Java based system.
 It has been created for algorithmic trading for developers (even for those who has very little knowledge on software development) using Zerodha Kite Connect system.
+For details about Kite Connect Streaming Quote, check out link: https://kite.trade/docs/connect/v1/#streaming-websocket.
 
 # Current Features
 * **Open-Source** - ZStreamingQuote has been released under an extremely permissive open-source MIT License, which allows full usage in both research and commercial applications, without restriction, but with no warranty of any kind whatsoever.
@@ -13,7 +14,7 @@ It has been created for algorithmic trading for developers (even for those who h
 * **Streamed Quote** - Other than OHLCV, the complete Streamed Quote between two time frame can be queried for application use. this is the JSON formatted raw websocket data.
 * **Multithreaded system** - ZStreamingQuote system is multithreaded to remove latencies at various stages e.g. between receiving, processing and storing.
 * **Auto Reconnect** - Auto Reconnect feature for the web socket has been incorporated at various states of Web Socket functionality, e.g., at heart bit failure, data starvation, abrupt closure, web socket connect/open failure etc etc
-* **Completely Configurable** - ZStreamingQuote is developed in highly configured manner. The system configurations can be configured through the configuration file.
+* **Completely Configurable** - ZStreamingQuote is developed in highly configured manner. The system configurations can be configured through the configuration file. The complete details about all configurations are mentioned at later section of this page.
 
 # On Going Feature Development
 * **CSV Formatted Data** - Currently, ZStreamingQuote provides response data as JSON formatted when run in web service mode. To provide the data in CSV format is an ongoing development going on.
@@ -52,14 +53,24 @@ Windows, assumed that it will run from the \target folder itself:
 
 # Usage - Stand Alone System
 In this mode, Java APIs of the framework can be integrated in your own Java application to run the system in stand alone fashion. Its just like running any other jar in the system (basically desktop version).
+
 Example code is given in ```TestApp.java```, Path: ```<root>/src/main/java/com/ritesh/zstreamingquote/app/TestApp.java```
+
 Step 1: Modify ```apiKey```, ```userId```, ```publicToken```.
+
 Step 2: Call ```ZStreamingQuoteControl.getInstance().start()``` with these three parameters.
+
 Step 3: Modify ```fromTime``` and ```toTime``` according to the time range for which data is required.
+
 Step 4: Modify ```instrumentToken``` for which data is required.
+
 Step 5: Call ```ZStreamingQuoteControl.getInstance().getOHLCDataByTimeRange()``` with these three parameters to get **Open/High/Low/Close/Volume** data between these times for the given instrument.
-Step 6: Call ```ZStreamingQuoteControl.getInstance().getQuoteListByTimeRange()``` with these three parameters to get the complete data between these times for the given instrument
+
+Step 6: Call ```ZStreamingQuoteControl.getInstance().getQuoteListByTimeRange()``` with these three parameters to get the ```complete streamed data``` between these times for the given instrument.
+
 Step 7: Call ```ZStreamingQuoteControl.getInstance().stop()``` to stop the system.
+
+# Usage - Web Service System
 
 
 Web Service URLs:
