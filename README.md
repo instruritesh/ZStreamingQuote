@@ -21,18 +21,26 @@ It has been created for algorithmic trading for developers (even for those who h
 # Dependencies
 1) Java 8 to be installed. Check the version of Java:
 ```java -version```, It should be 1.8.0.xxx
+
 2) Maven building infrastructure is required to build the system. Check out the link: http://www.mkyong.com/maven/how-to-install-maven-in-windows/
+
 2) MySQL database to be installed in the system/server for storing quotes, otherwise quote query will fail. For guide to install MySQL, check out the link: http://www.tutorialspoint.com/mysql/mysql-installation.htm
+
 3) Default MySQL database name 'ZStreamingQuotesDB' should be present. The database name can be configured.
+
 
 # Installation
 Developers can clone the git repository, otherwise the source code can also be downloaded as zip from this page.
+
 1) Go to the project directory:
 ```cd D:\ZStreamingQuote-master```, check if pom.xml exists in the path
+
 2) Build maven project in root folder (where pom.xml exists):
 ```mvn clean package```
 check if ```ZStreamingQuote-1.0-SNAPSHOT-jar-with-dependencies.jar``` is created in \target folder.
+
 3) This jar can be deployed in linux machine or windows machine and can be run as platform independent way. No further jar dependencies are required, its been incorporated inside the jar package created.
+
 4) Running the system:
 Linux, assumed that the jar is placed in /home/ directory:
 ```nohup java -jar /home/ZStreamingQuote-master/target/ZStreamingQuote-1.0-SNAPSHOT-jar-with-dependencies.jar > /home/ZStreamingQuote-master/target/ZStreamingQuote.txt &```
