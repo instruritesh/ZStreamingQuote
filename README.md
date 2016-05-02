@@ -72,13 +72,84 @@ Step 6: Call ```ZStreamingQuoteControl.getInstance().getQuoteListByTimeRange()``
 
 Step 7: Call ```ZStreamingQuoteControl.getInstance().stop()``` to stop the system.
 
+NOTE: If you plan to use maven build for stand alone system, remember to replace the Jetty server class main method assigned as ```mainClass``` for maven build to your main mthod class with fully qualified path name.
+
 # Usage - Web Service System
+In this mode, Java code need not be modified. Just run the system (see above point on running system). Access the REST API URLs for controlling the streaming quote process and querying data from any application/webpage/command line. The URLs are described below (assuming the Host IP of the web server running is ```localhost```, modify the host ip with it if you intend to run the server at remote IP)
+1) **Start The System**: 
+Assuming your user id=DR1234, api key=abc2flfdgh9cge4, public token=bb20b54f2d9a0b6efa8d879e80a024dd.
+This API call will start the Complete System.
+GET URL: ```http://localhost:8080/zstreamingquote/start/?apikey=abc2flfdgh9cge4&userid=DR1234&publictoken=bb20b54f2d9a0b6efa8d879e80a024dd```.
+Modify the URL filter parameter accordingly
+  a) ```apikey``` - your Zerodha Connect API key, 
+  b) ```userid``` - your Zerodha ID.
+  c) ```publictoken``` - your public token obtained after loging in to Zerodha Connect API. For login details check link: ```https://kite.trade/docs/connect/v1/#login-flow```.
 
+2) **Stop The System**: 
+This API call will stop the Complete System.
+GET URL: ```http://localhost:8080/zstreamingquote/stop/```
 
-Web Service URLs:
-```
-http://localhost:8080/zstreamingquote/start/?apikey=zac2flvsbza9cge4&userid=DR2062&publictoken=bb20b54f2d9a0b6efa8d879e80a024dd
-http://localhost:8080/zstreamingquote/stop/
-http://localhost:8080/zstreamingquote/timerangeohlc/?format=json&instrument=121345&from=10:00:00&to=20:00:00
-http://localhost:8080/zstreamingquote/timerangestreamingquote/?format=json&instrument=121345&from=10:00:00&to=20:00:00
-```
+3) **Query OHLCV between a time range**: 
+Assuming that you want the JSON formatted Open/High/Low/Close/Volume data within time range 09:20:00 a.m to 09:30:00 a.m. for the instrument token 121345.
+This API call will start the Complete System.
+GET URL: ```http://localhost:8080/zstreamingquote/timerangeohlc/?format=json&instrument=121345&from=09:20:00&to=09:30:00```.
+Modify the URL filter parameter accordingly
+  a) ```format``` - in which format data will be fetched, currently only ```json``` is supported, 
+  b) ```instrument``` - instrument token for which data is required, this is obtained from Zerodha connect API ```https://api.kite.trade/instruments?api_key=xxx```. NOTE: instrument tokens required for your subscription must be assigned in config paramters explained below.
+  c) ```from``` - beginning time of the time range from which OHLCV data is required,
+  d) ```to``` - end time of the time range till which OHLCV data is required.
+
+4) **Query Raw Streamed Quote data between a time range**: 
+Assuming that you want the JSON formatted Open/High/Low/Close/Volume data within time range 09:20:00 a.m to 09:30:00 a.m. for the instrument token 121345.
+This API call will start the Complete System.
+GET URL: ```http://localhost:8080/zstreamingquote/timerangestreamingquote/?format=json&instrument=121345&from=09:20:00&to=09:30:00```.
+Modify the URL filter parameter accordingly
+  a) ```format``` - in which format data will be fetched, currently only ```json``` is supported, 
+  b) ```instrument``` - instrument token for which data is required, this is obtained from Zerodha connect API ```https://api.kite.trade/instruments?api_key=xxx```. NOTE: instrument tokens required for your subscription must be assigned in config paramters explained below.
+  c) ```from``` - beginning time of the time range from which raw streamed quote data is required,
+  d) ```to``` - end time of the time range till which raw streamed quote data is required.
+  
+  NOTE: The JSON data for raw streamed quote API will provide response according to the mode subscribed e.g. ```ltp```/```quote```/```full```, the JSON structure will change accordingly. The mode can be changed from configuration mentioned below.
+
+# Configurations
+The Configuration file is ```ZStreamingConfig.java```, Path in the project tree is ```/src/main/java/com/ritesh/zstreamingquote/config/ZStreamingConfig.java```. Modify the following parameters according to your need. Default values in built are already in place.
+
+**Common Configurations**:
+1) ```QUOTE_STREAMING_START_TIME```: If you want the system to start at later point of time than immediate start, modify the start time here in ```HH:MM:SS``` format. Type: ```String```. Default value: ```"09:15:01"```.
+2) ```QUOTE_STREAMING_WS_HEARTBIT_CHECK_TIME```: Time gap after which system will reconnect once Heart Bit is missed, Value is in milliseconds. Type: ```Integer```. Default value: ```3000```.
+3) ```QUOTE_STREAMING_WS_DATA_CHECK_TIME_ON_SUBSCRIBE```: Time gap after which system will reconnect once it detects it starves for data even though subscribed for instruments, Value is in milliseconds. Type: ```Integer```. Default value: ```5000```.
+4) ```QUOTE_STREAMING_WS_SUBSCRIBE_DELAY_ON_INITIATE```: Time gap after which system will reconnect once it detects Web Socket did not get opened even though it has been initiated, Value is in milliseconds. Type: ```Integer```. Default value: ```500```.
+5) ```QUOTE_STREAMING_REINITIATE_RETRY_LIMIT```: Number of connection retry, if it detects Web Socket did not get opened even though it has been initiated, Value is in milliseconds. Type: ```Integer```. Default value: ```5```.
+6) ```QUOTE_STREAMING_START_AT_BOOTUP```: Whether to start the websocket streaming immediately once application starts or to be delayed. NOTE: If delayed configure ```QUOTE_STREAMING_START_TIME``` above. Type: ```Boolean```. Default value: ```false```.
+
+**Database Configurations**:
+7) ```QUOTE_STREAMING_DB_URL```: MySQL Database name and JDBC URL path. Type: ```String```. Default value: ```"jdbc:mysql://localhost/ZStreamingQuotesDB"```.
+8) ```QUOTE_STREAMING_DB_USER```: user name of the database. Type: ```String```. Default value: ```"root"```.
+9) ```QUOTE_STREAMING_DB_PWD```: user password of the database. Type: ```String```. Default value: ```""```.
+10) ```QUOTE_STREAMING_DB_TABLE_NAME_PRE_APPENDER```: Table Name pre appender which will be used to create the table name initial words once websocket starts ticking data. Type: ```String```. Default value: ```"StreamingQuoteMode_Mode"```.
+11) ```QUOTE_STREAMING_DB_TABLE_NAME_POST_APPENDER```: Table Name post appender which will be used to create the table name later words once websocket starts ticking data. Type: ```String```. Default value: ```"_Date"```.
+12) ```QUOTE_STREAMING_DB_STORE_REQD```: Flag whether to store the streaming data in DB or not. Type: ```Boolean```. Default value: ```true```.
+
+**Debug print Configurations**:
+13) ```QUOTE_STREAMING_HEART_BIT_MSG_PRINT```: Flag whether to print Heart Bit Messages or not. Type: ```Boolean```. Default value: ```true```.
+14) ```QUOTE_STREAMING_QUOTE_FLOW_MSG_PRINT```: Flag whether to print quote messages or not. Type: ```Boolean```. Default value: ```true```.
+15) ```QUOTE_STREAMING_WEB_SERVICE_MSG_PRINT```: Flag whether to print Web Service Messages or not. Type: ```Boolean```. Default value: ```true```.
+
+**Mandatory Configurations**:
+16) ```QUOTE_STREAMING_INSTRUMENTS_ARR```: Instrument Tokens for which Data is to be subscribed in Web Socket. Type: ```String Array```. Default value: ```{ "121345", "1793" }```. ***NOTE: This is a mandatory field to be modified according to your requirement.***
+17) ```QUOTE_STREAMING_TRADING_HOLIDAYS```: Trading Holiday dates on which Web Socket will not be activated in ```DD-MM-YYYY``` format. This field is useful when your system runs in cronjob automatically by default everyday and to prevent unneccessary data population. Type: ```String Array```. Default value: ```{ "26-01-2016", "07-03-2016", "24-03-2016", "25-03-2016", "14-04-2016", "15-04-2016", "19-04-2016", "06-07-2016", "15-08-2016", "05-09-2016", "13-09-2016", "11-10-2016", "12-10-2016", "31-10-2016", "14-11-2016" }```. ***NOTE: This is a mandatory field to be modified according to your requirement.***
+18) ```QUOTE_STREAMING_DEFAULT_MODE```: Mode in which quote data will be received from web socket, accordingly system will switch the mode after subscribing. ```QUOTE_STREAMING_MODE_LTP = "ltp"```, ```QUOTE_STREAMING_MODE_QUOTE = "quote"```, ```QUOTE_STREAMING_MODE_FULL = "full"```. Type: ```String```. Default value: ```QUOTE_STREAMING_MODE_QUOTE```.
+
+**Web Server Configurations**:
+19) ```JETTY_SERVER_PORT_NUM```: Port Number in which Web Server will run in you system. Type: ```Integer```. Default value: ```8080```.
+20) ```JETTY_SERVER_PROCESS_START_URL```: URL for starting the streaming process, this is mapped to point 1) **Start The System** in **Usage - Web Service System** mentioned above. Type: ```String```. Default value: ```"/zstreamingquote/start"```.
+21) ```JETTY_SERVER_PROCESS_STOP_URL```: URL for stopping the streaming process, this is mapped to point 2) **Stop The System** in **Usage - Web Service System** mentioned above. Type: ```String```. Default value: ```"/zstreamingquote/stop"```.
+22) ```JETTY_SERVER_TIMERANGE_OHLC_URL```: URL for querying the OHLCV data from system, this is mapped to point 3) **Query OHLCV between a time range** in **Usage - Web Service System** mentioned above. Type: ```String```. Default value: ```"/zstreamingquote/timerangeohlc"```.
+23) ```JETTY_SERVER_TIMERANGE_STREAMING_QUOTE_URL```: URL for querying the raw streamed quote data from system, this is mapped to point 4) **Query Raw Streamed Quote data between a time range** in **Usage - Web Service System** mentioned above. Type: ```String```. Default value: ```"/zstreamingquote/timerangestreamingquote"```.
+24) ```JETTY_SERVER_PROCESS_START_APIKEY_REQ_PARAM```: API Key filter request parameter in process start URL, this is mapped to point 1) **Start The System**  in **Usage - Web Service System** mentioned above. Type: ```String```. Default value: ```"apikey"```.
+25) ```JETTY_SERVER_PROCESS_START_USERID_REQ_PARAM```: User Id filter request parameter in process start URL, this is mapped to point 1) **Start The System**  in **Usage - Web Service System** mentioned above. Type: ```String```. Default value: ```"userid"```.
+26) ```JETTY_SERVER_PROCESS_START_PUBTOKEN_REQ_PARAM```: Public Token filter request parameter in process start URL, this is mapped to point 1) **Start The System**  in **Usage - Web Service System** mentioned above. Type: ```String```. Default value: ```"publictoken"```.
+27) ```JETTY_SERVER_TIMERANGE_FORMAT_REQ_PARAM```: Data format filter request parameter in Data Query (OHLCV/Streamed Data) URL, this is mapped to both point 3) **Query OHLCV between a time range** and 4) **Query Raw Streamed Quote data between a time range** in **Usage - Web Service System** mentioned above. Type: ```String```. Default value: ```"format"```.
+28) ```JETTY_SERVER_TIMERANGE_FROM_TIME_REQ_PARAM```: From Time (beginning time) of the time range filter request parameter in Data Query (OHLCV/Streamed Data) URL, this is mapped to both point 3) **Query OHLCV between a time range** and 4) **Query Raw Streamed Quote data between a time range** in **Usage - Web Service System** mentioned above. Type: ```String```. Default value: ```"from"```.
+29) ```JETTY_SERVER_TIMERANGE_TO_TIME_REQ_PARAM```: To Time (end time) of the time range filter request parameter in Data Query (OHLCV/Streamed Data) URL, this is mapped to both point 3) **Query OHLCV between a time range** and 4) **Query Raw Streamed Quote data between a time range** in **Usage - Web Service System** mentioned above. Type: ```String```. Default value: ```"to"```.
+30) ```JETTY_SERVER_TIMERANGE_INSTRUMENT_REQ_PARAM```: Instrument Token filter request parameter in Data Query (OHLCV/Streamed Data) URL, this is mapped to both point 3) **Query OHLCV between a time range** and 4) **Query Raw Streamed Quote data between a time range** in **Usage - Web Service System** mentioned above. Type: ```String```. Default value: ```"instrument"```. **NOTE: Values passed here must be used for Subscribing data from Web Socket also else No Data will be provided.**
