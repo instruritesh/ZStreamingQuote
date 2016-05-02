@@ -1,6 +1,8 @@
 # ZStreamingQuote
 ZStreamingQuote is an open source framework for handling, processing and storing of Streaming Quotes for Zerodha Kite Connect Web Socket based Streaming Quotes. It is a Java based system.
+
 It has been created for algorithmic trading for developers (even for those who has very little knowledge on software development) using Zerodha Kite Connect system.
+
 For details about Kite Connect Streaming Quote, check out link: https://kite.trade/docs/connect/v1/#streaming-websocket.
 
 # Current Features
