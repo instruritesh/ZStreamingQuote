@@ -1,7 +1,7 @@
 # ZStreamingQuote
 ZStreamingQuote is an open source framework for handling, processing and storing of Streaming Quotes for Zerodha Kite Connect Web Socket based Streaming Quotes. It is a Java based system.
 
-It has been created for algorithmic trading for developers (even for those who has very little knowledge on software development) using Zerodha Kite Connect system.
+It has been created for algorithmic trading for quants/developers (even for those who has very little knowledge on software development) using Zerodha Kite Connect system.
 
 For details about Kite Connect Streaming Quote, check out link: https://kite.trade/docs/connect/v1/#streaming-websocket.
 
@@ -10,7 +10,7 @@ For details about Kite Connect Streaming Quote, check out link: https://kite.tra
 * **Free** - ZStreamingQuote is completely free and costs nothing to download or use.
 * **Collaboration** - As ZStreamingQuote is open-source, developers can collaborate to improve the software. New features will be added frequently. Any bugs can be reported, will be fixed.
 * **Stand Alone System** - ZStreamingQuote framework APIs can be integrated to any Java Application to run as a standalone system. Example source code is provided.
-* **Web Service System** - Complete ZStreamingQuote framework can be run as a web service system also, REST based URL handlers are integrated. Code need not be modified to run the system. Its useful for non developers as well as non-Java guys.
+* **Web Service System** - Complete ZStreamingQuote framework can be run as a web service system also, REST based URL handlers are integrated. Code need not be modified to run the system except the 3 mandatory configurations. Its useful for non developers as well as non-Java guys.
 * **Database Storage** - MySQL based database storage feature is incorporated.
 * **OHLCV Data** - Feature to query Open/High/Low/Close/Volume data between a time range is incorporated. This is based on processing of stored streamed quote data between two requested times. This is JSON formatted data and useful for feeding the data to decision making intraday algorithms e.g. 5minute OHLC, 1minute OHLC etc etc.
 * **Streamed Quote** - Other than OHLCV, the complete Streamed Quote between two time frame can be queried for application use. this is the JSON formatted raw websocket data.
@@ -75,7 +75,7 @@ Step 7: Call ```ZStreamingQuoteControl.getInstance().stop()``` to stop the syste
 NOTE: If you plan to use maven build for stand alone system, remember to replace the Jetty server class main method assigned as ```mainClass``` for maven build to your main mthod class with fully qualified path name.
 
 # Usage - Web Service System
-In this mode, Java code need not be modified. Just run the system (see above point on running system) except the User specific Configurations mentioned at later section below.
+In this mode, Java code need not be modified. Just run the system (see above point on running system) except the 3 mandatory User specific Configurations mentioned at later section below (specially the instrument tokens for which data is required).
 
 Access the REST API URLs for controlling the streaming quote process and querying data from any application/webpage/command line. The URLs are described below (assuming the Host IP of the web server running is ```localhost```, modify the host ip with it if you intend to run the server at remote IP)
 
@@ -87,7 +87,9 @@ GET URL: ```http://localhost:8080/zstreamingquote/start/?apikey=abc2flfdgh9cge4&
 
 Modify the URL filter parameter accordingly
   a) ```apikey``` - your Zerodha Connect API key, 
+  
   b) ```userid``` - your Zerodha ID.
+  
   c) ```publictoken``` - your public token obtained after loging in to Zerodha Connect API. For login details check link: ```https://kite.trade/docs/connect/v1/#login-flow```.
 
 2) **Stop The System**: 
@@ -103,8 +105,11 @@ GET URL: ```http://localhost:8080/zstreamingquote/timerangeohlc/?format=json&ins
 
 Modify the URL filter parameter accordingly
   a) ```format``` - in which format data will be fetched, currently only ```json``` is supported, 
+  
   b) ```instrument``` - instrument token for which data is required, this is obtained from Zerodha connect API ```https://api.kite.trade/instruments?api_key=xxx```. NOTE: instrument tokens required for your subscription must be assigned in config paramters explained below.
+  
   c) ```from``` - beginning time of the time range from which OHLCV data is required,
+  
   d) ```to``` - end time of the time range till which OHLCV data is required.
 
 4) **Query Raw Streamed Quote data between a time range**: 
@@ -115,8 +120,11 @@ GET URL: ```http://localhost:8080/zstreamingquote/timerangestreamingquote/?forma
 
 Modify the URL filter parameter accordingly
   a) ```format``` - in which format data will be fetched, currently only ```json``` is supported, 
+  
   b) ```instrument``` - instrument token for which data is required, this is obtained from Zerodha connect API ```https://api.kite.trade/instruments?api_key=xxx```. NOTE: instrument tokens required for your subscription must be assigned in config paramters explained below.
+  
   c) ```from``` - beginning time of the time range from which raw streamed quote data is required,
+  
   d) ```to``` - end time of the time range till which raw streamed quote data is required.
   
   NOTE: The JSON data for raw streamed quote API will provide response according to the mode subscribed e.g. ```ltp```/```quote```/```full```, the JSON structure will change accordingly. The mode can be changed from configuration mentioned below.
