@@ -13,6 +13,36 @@ It has been created for algorithmic trading for developers (even for those who h
 * **Streamed Quote** - Other than OHLCV, the complete Streamed Quote between two time frame can be queried for application use. this is the JSON formatted raw websocket data.
 * **Multithreaded system** - ZStreamingQuote system is multithreaded to remove latencies at various stages e.g. between receiving, processing and storing.
 * **Auto Reconnect** - Auto Reconnect feature for the web socket has been incorporated at various states of Web Socket functionality, e.g., at heart bit failure, data starvation, abrupt closure, web socket connect/open failure etc etc
+* **Completely Configurable** - ZStreamingQuote is developed in highly configured manner. The system configurations can be configured through the configuration file.
+
+# On Going Feature Development
+* **CSV Formatted Data** - Currently, ZStreamingQuote provides response data as JSON formatted when run in web service mode. To provide the data in CSV format is an ongoing development going on.
+
+# Dependencies
+1) Java 8 to be installed. Check the version of Java:
+```java -version```, It should be 1.8.0.xxx
+2) Maven building infrastructure is required to build the system. Check out the link: http://www.mkyong.com/maven/how-to-install-maven-in-windows/
+2) MySQL database to be installed in the system/server for storing quotes, otherwise quote query will fail. For guide to install MySQL, check out the link: http://www.tutorialspoint.com/mysql/mysql-installation.htm
+3) Default MySQL database name 'ZStreamingQuotesDB' should be present. The database name can be configured.
+
+# Installation
+Developers can clone the git repository, otherwise the source code can also be downloaded as zip from this page.
+1) Go to the project directory:
+```cd D:\ZStreamingQuote-master```, check if pom.xml exists in the path
+2) Build maven project in root folder (where pom.xml exists):
+```mvn clean package```
+check if ```ZStreamingQuote-1.0-SNAPSHOT-jar-with-dependencies.jar``` is created in \target folder.
+3) This jar can be deployed in linux machine or windows machine and can be run as platform independent way. No further jar dependencies are required, its been incorporated inside the jar package created.
+4) Running the system:
+Linux, assumed that the jar is placed in /home/ directory:
+```nohup java -jar /home/ZStreamingQuote-master/target/ZStreamingQuote-1.0-SNAPSHOT-jar-with-dependencies.jar > /home/ZStreamingQuote-master/target/ZStreamingQuote.txt &```
+This should run the system as a background process and would not be killed even if working console is closed (If not required e.g. testing purpose, remove ```nohup``` and ```&``` from the command).
+Windows, assumed that it will run from the \target folder itself:
+```java -jar .\target\ZStreamingQuote-1.0-SNAPSHOT-jar-with-dependencies.jar > .\target\ZStreamingQuoteLogs.txt```
+
+# Usage - Stand Alone System
+
+
 
 Web Service URLs:
 ```
