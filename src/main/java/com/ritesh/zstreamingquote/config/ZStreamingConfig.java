@@ -30,6 +30,7 @@ public class ZStreamingConfig {
 	public static final String QUOTE_STREAMING_MODE_LTP = "ltp";
 	public static final String QUOTE_STREAMING_MODE_QUOTE = "quote";
 	public static final String QUOTE_STREAMING_MODE_FULL = "full";
+	public static final String QUOTE_STREAMING_DEFAULT_MODE = QUOTE_STREAMING_MODE_QUOTE;
 
 	public static final Integer JETTY_SERVER_PORT_NUM = 8080;
 	public static final String JETTY_SERVER_PROCESS_START_URL = "/zstreamingquote/start";
@@ -93,7 +94,7 @@ public class ZStreamingConfig {
 	 */
 	public static String getStreamingQuoteMode() {
 		// Streaming Data Mode: 'ltp' / 'quote' / 'full'
-		return QUOTE_STREAMING_MODE_QUOTE;
+		return QUOTE_STREAMING_DEFAULT_MODE;
 	}
 
 	/**
