@@ -26,7 +26,9 @@ It has been created for algorithmic trading for developers (even for those who h
 
 2) MySQL database to be installed in the system/server for storing quotes, otherwise quote query will fail. For guide to install MySQL, check out the link: http://www.tutorialspoint.com/mysql/mysql-installation.htm
 
-3) Default MySQL database name 'ZStreamingQuotesDB' should be present. The database name can be configured.
+3) Default MySQL database name ```ZStreamingQuotesDB``` should be present. The database name can be configured.
+
+4) User requires to be logged in Zerodha Kite system, since apikey, userid and public token is required to run the system.
 
 
 # Installation
@@ -49,7 +51,15 @@ Windows, assumed that it will run from the \target folder itself:
 ```java -jar .\target\ZStreamingQuote-1.0-SNAPSHOT-jar-with-dependencies.jar > .\target\ZStreamingQuoteLogs.txt```
 
 # Usage - Stand Alone System
-
+In this mode, Java APIs of the framework can be integrated in your own Java application to run the system in stand alone fashion. Its just like running any other jar in the system (basically desktop version).
+Example code is given in ```TestApp.java```, Path: ```<root>/src/main/java/com/ritesh/zstreamingquote/app/TestApp.java```
+Step 1: Modify ```apiKey```, ```userId```, ```publicToken```.
+Step 2: Call ```ZStreamingQuoteControl.getInstance().start()``` with these three parameters.
+Step 3: Modify ```fromTime``` and ```toTime``` according to the time range for which data is required.
+Step 4: Modify ```instrumentToken``` for which data is required.
+Step 5: Call ```ZStreamingQuoteControl.getInstance().getOHLCDataByTimeRange()``` with these three parameters to get **Open/High/Low/Close/Volume** data between these times for the given instrument.
+Step 6: Call ```ZStreamingQuoteControl.getInstance().getQuoteListByTimeRange()``` with these three parameters to get the complete data between these times for the given instrument
+Step 7: Call ```ZStreamingQuoteControl.getInstance().stop()``` to stop the system.
 
 
 Web Service URLs:
