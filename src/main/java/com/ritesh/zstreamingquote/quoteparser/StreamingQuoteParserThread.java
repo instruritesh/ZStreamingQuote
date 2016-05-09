@@ -62,7 +62,14 @@ public class StreamingQuoteParserThread implements Runnable{
 				if(bufferObj instanceof ByteBuffer){
 					String time = timeFormat.format(Calendar.getInstance(timeZone).getTime());
 					ByteBuffer buffer = (ByteBuffer)bufferObj;
-					parseBuffer(buffer, time);
+					try {
+						parseBuffer(buffer, time);
+					} catch (Exception e) {
+						//If its an exception while parsing the data, we dont require this data
+						System.out.println(
+								"StreamingQuoteParserThread.run(): ERROR: Exception in parsing the Buffer, reason: "
+										+ e.getMessage());
+					}
 				}
 			} catch (InterruptedException e) {
 				System.out.println("StreamingQuoteParserThread.run(): ERROR: InterruptedException on take from quoteBufferQ");
@@ -84,13 +91,9 @@ public class StreamingQuoteParserThread implements Runnable{
 	 * @param time
 	 */
 	private void parseBuffer(ByteBuffer buffer, String time){
-		//String msgString = Arrays.toString(buffer.array());
-		//System.out.println("Byte Buffer:" + msgString);
-
 		// start parse Buffer array
 		int start = buffer.position();
 		int buffLen = buffer.capacity();
-//		System.out.println("start: " + start + ", buffLen: " + buffLen);
 		if (buffLen == 1) {
 			// HeartBeat
 			if(ZStreamingConfig.isHeartBitMsgPrintable()){
@@ -99,23 +102,40 @@ public class StreamingQuoteParserThread implements Runnable{
 		} else {
 			// num of Packets
 			int numPackets = buffer.getShort();
-			start += 2;
-			//System.out.println("numPackets: " + numPackets);
-			for (int i = 0; i < numPackets; i++) {
-				// each packet
-				//System.out.println("packet num: " + i);
-				int numBytes = buffer.getShort();
+			if (numPackets == 0) {
+				// Invalid Case: Zero Num of Packets - ignore
+				System.out.println(
+						"StreamingQuoteParserThread.parseBuffer(): ERROR: WS Byte numPackets is 0 in WS message, Ignoring !!!");
+			} else {
 				start += 2;
-//				System.out.println("start: " + start + ", pkt num bytes: " + numBytes);
-
-				// packet structure
-				byte[] pkt = new byte[numBytes];
-				buffer.get(pkt, 0, numBytes);
-				ByteBuffer pktBuffer = ByteBuffer.wrap(pkt);
-				
-				//parse quote packet buffer
-				parseQuotePktBuffer(pktBuffer, time);
-				start += numBytes;
+				//System.out.println("numPackets: " + numPackets);
+				for (int i = 0; i < numPackets; i++) {
+					// each packet
+					//System.out.println("packet num: " + i);
+					int numBytes = buffer.getShort();
+					if (numBytes != 0) {
+						// Valid Number of Bytes
+						start += 2;
+		
+						// packet structure
+						byte[] pkt = new byte[numBytes];
+						buffer.get(pkt, 0, numBytes);
+						ByteBuffer pktBuffer = ByteBuffer.wrap(pkt);
+						if (pktBuffer != null) {
+							//parse quote packet buffer
+							parseQuotePktBuffer(pktBuffer, time);
+							start += numBytes;
+						} else {
+							// Invalid Case: ByteBuffer could not wrap the bytes
+							// - ignore
+							System.out.println(
+									"StreamingQuoteParserThread.parseBuffer(): ERROR: pktBuffer is null in WS message, Ignoring !!!");
+						}
+					} else {
+						// Invalid Case: Zero Num of Bytes in packet - ignore
+						System.out.println("StreamingQuoteParserThread.parseBuffer(): ERROR: numBytes is 0 in WS message packet[" + i + "], Ignoring !!!");
+					}
+				}
 			}
 		}
 	}

@@ -5,6 +5,7 @@ public class ZStreamingConfig {
 	 * Configuration Constants
 	 */
 	public static final String QUOTE_STREAMING_START_TIME = "09:15:01";
+	public static final Integer QUOTE_STREAMING_REINITIATE_DELAY_ON_INITIATE_FAIL = 500;
 	public static final Integer QUOTE_STREAMING_WS_HEARTBIT_CHECK_TIME = 3000;
 	public static final Integer QUOTE_STREAMING_WS_DATA_CHECK_TIME_ON_SUBSCRIBE = 5000;
 	public static final Integer QUOTE_STREAMING_WS_SUBSCRIBE_DELAY_ON_INITIATE = 500;
@@ -58,6 +59,11 @@ public class ZStreamingConfig {
 		// If WebSocket streaming is delayed, configure the start time when
 		// streaming should be started
 		return QUOTE_STREAMING_START_TIME;
+	}
+	
+	public static Integer getStreamingQuoteReinitiateDelayOnInitiateFail(){
+		//If websocket initiation fails due to exception, reiinitiate with after this delay
+		return QUOTE_STREAMING_REINITIATE_DELAY_ON_INITIATE_FAIL;
 	}
 
 	public static Integer getStreamingQuoteHeartBitCheckTime() {

@@ -42,6 +42,8 @@ public class WebsocketClientEndpoint {
 					"WebsocketClientEndpoint.WebsocketClientEndpoint(): ERROR: Exception on container connectToServer, reason: "
 							+ e.getMessage());
 			//throw new RuntimeException(e);
+        	//notify initiate failed
+        	this.sessionNotifier.notifyWsInitiateFailed();
 		}
 	}
 
