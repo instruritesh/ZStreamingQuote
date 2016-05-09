@@ -2,6 +2,7 @@ package com.ritesh.zstreamingquote.websocket;
 
 public interface IwsSessionNotifier {
 	
+	public void notifyWsInitiateFailed();
 	public void notifyWsSessionOpened();
 	public void notifyWsSessionClosed(boolean toTerminate);
 	public void notifyWsDataMissedAfterSubscribe();

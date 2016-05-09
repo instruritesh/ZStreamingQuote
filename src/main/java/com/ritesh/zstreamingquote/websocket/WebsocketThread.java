@@ -239,6 +239,37 @@ public class WebsocketThread implements Runnable, IwsSessionNotifier{
 	}
 	
 	@Override
+	public void notifyWsInitiateFailed(){
+		try {
+			//delay before re initiating
+			Thread.sleep(ZStreamingConfig.getStreamingQuoteReinitiateDelayOnInitiateFail());
+		} catch (InterruptedException e1) {
+			System.out.println("WebsocketThread.notifyWsInitiateFailure(): ERROR: InterruptedException on sleep !!!");
+		}
+		
+		// Establish the websocket again
+		try {
+			System.out.println(
+					"WebsocketThread.notifyWsInitiateFailure(): Previous WS initiate Failed, "
+							+ "creating new WebsocketClientEndpoint with URI: <" + URIstring + ">....");
+			clientEndPoint = new WebsocketClientEndpoint(new URI(URIstring), this);
+			// save the state of web socket
+			currWSstateLock.lock();
+			currWSstate = WSstate.WS_INITIATED;
+			currWSstateLock.unlock();
+			
+			// Subscribe again with message Handler
+			System.out.println(
+					"WebsocketThread.notifyWsInitiateFailure(): ReSending Suscribe message with handler to Streaming Quote WS server");
+			subscribeWSwithMsgHandler();
+		} catch (URISyntaxException e) {
+			System.out.println("WebsocketThread.notifyWsInitiateFailure(): ERROR: URISyntaxException on WebsocketClientEndpoint");
+			e.printStackTrace();
+		}
+	}
+
+	
+	@Override
 	public void notifyWsSessionOpened(){
 		//save the state of web socket
 		currWSstateLock.lock();
